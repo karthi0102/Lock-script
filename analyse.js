@@ -1,11 +1,13 @@
 const fs = require('fs');
 
 // --- Configuration ---
-const INPUT_FILE = 'lock-2.json';      // Your raw lock data
-const OUTPUT_FILE = 'fault_report-2.json'; // The final summary report
+const INPUT_FILE = 'lock-1.json';      // Your raw lock data
+const OUTPUT_FILE = 'fault_report-1.json'; // The final summary report
 const DROP_THRESHOLD = 5;          // A "significant" drop is 5% or more
 const FAULTY_MAX_DROP = 10;          // A lock is faulty if max drop > 10...
 const FAULTY_DROP_COUNT = 3;           // ...AND drop count >= 3 on the same day
+
+let locks = 0
 
 /**
  * Generates a detailed analysis object for a single day's readings.
@@ -44,10 +46,10 @@ function generateFaultReport() {
   const rawData = JSON.parse(fs.readFileSync(INPUT_FILE, 'utf-8'));
   const detailedAnalysis = {};
 
-  console.log(Object.keys(rawData).length)
 
   for (const hub in rawData) {
     detailedAnalysis[hub] = {};
+    locks += Object.keys(rawData[hub]).length
     for (const lock in rawData[hub]) {
       detailedAnalysis[hub][lock] = {};
       for (const day in rawData[hub][lock]) {
@@ -86,11 +88,13 @@ function generateFaultReport() {
   return finalReport;
 }
 
+
 // --- Execute the script ---
 try {
-  console.log('Generating comprehensive fault report...');
-  const report = generateFaultReport();
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(report, null, 2));
+    console.log('Generating comprehensive fault report...');
+    const report = generateFaultReport();
+    fs.writeFileSync(OUTPUT_FILE, JSON.stringify(report, null, 2));
+    console.log('Total locks', locks)
   console.log(`✅ Success! Fault report saved to '${OUTPUT_FILE}'.`);
 } catch (error) {
   console.error('❌ An error occurred:', error.message);
