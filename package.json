@@ -1,0 +1,18 @@
+{
+  "name": "getbatterydata",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "csv-parser": "^3.2.0",
+    "csv-writer": "^1.6.0",
+    "date-fns": "^4.1.0",
+    "json2csv": "^6.0.0-alpha.2"
+  }
+}
