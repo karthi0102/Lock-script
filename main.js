@@ -2,10 +2,9 @@ const fs = require('fs');
 const csv = require('csv-parser');
 
 const csvFilePath = 'lock-2-sorted.csv';
-const jsonFilePath = 'lock.json';
+const jsonFilePath = 'lock-2.json';
 
-const categorizedData = JSON.parse(fs.readFileSync(jsonFilePath));
-
+const categorizedData = {}
 
 fs.createReadStream(csvFilePath)
   .pipe(csv())
@@ -19,8 +18,6 @@ fs.createReadStream(csvFilePath)
     }
     if(!categorizedData[hubNo][thingName]){
       categorizedData[hubNo][thingName] = {}
-    }else{
-      return
     }
     if (!categorizedData[hubNo][thingName][dateKey]) {
         categorizedData[hubNo][thingName][dateKey] = [];
@@ -31,7 +28,7 @@ fs.createReadStream(csvFilePath)
 
 })
 .on('end', () => {
-    fs.writeFile(jsonFilePath,JSON.stringify(categorizedData), (err) => {
+    fs.writeFile(jsonFilePath,JSON.stringify(categorizedData,null,2), (err) => {
       if (err) {
         console.error('❌ Error writing JSON file:', err);
       } else {
